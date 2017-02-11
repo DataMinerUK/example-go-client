@@ -26,9 +26,9 @@ func main() {
 	}
 
 	pets := []Pet{}
-	error := json.Unmarshal(data, &pets)
+	err = json.Unmarshal(data, &pets)
 
-	if error != nil {
+	if err != nil {
 		log.Fatal(err)
 	}
 
