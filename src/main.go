@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sort"
 )
 
 type Pet struct {
@@ -13,6 +14,12 @@ type Pet struct {
 	Hobbies []string
 	Likes   int
 }
+
+type Pets []Pet
+
+func (p Pets) Len() int           { return len(p) }
+func (p Pets) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+func (p Pets) Less(i, j int) bool { return p[i].Name > p[j].Name }
 
 func main() {
 	resp, err := http.Get("http://localhost:9000/list")
@@ -25,8 +32,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	pets := []Pet{}
+	pets := Pets{}
 	err = json.Unmarshal(data, &pets)
+
+	sort.Sort(pets)
 
 	if err != nil {
 		log.Fatal(err)
